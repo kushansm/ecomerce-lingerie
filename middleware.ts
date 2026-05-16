@@ -6,11 +6,12 @@ const { auth } = NextAuth(authConfig)
 export default auth((req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
+  const userRole = (req.auth?.user as any)?.role
 
   const isApiAuthRoute = nextUrl.pathname.startsWith("/api/auth")
-  const isPublicRoute = ["/", "/shop", "/categories", "/new-arrivals", "/sale"].includes(nextUrl.pathname)
   const isAuthRoute = ["/login", "/register"].includes(nextUrl.pathname)
   const isProtectedRoute = ["/cart", "/checkout", "/profile"].includes(nextUrl.pathname)
+  const isAdminRoute = nextUrl.pathname.startsWith("/admin")
 
   if (isApiAuthRoute) return null
 
@@ -21,8 +22,12 @@ export default auth((req) => {
     return null
   }
 
-  if (!isLoggedIn && isProtectedRoute) {
+  if (!isLoggedIn && (isProtectedRoute || isAdminRoute)) {
     return Response.redirect(new URL("/login", nextUrl))
+  }
+
+  if (isAdminRoute && userRole !== "ADMIN") {
+    return Response.redirect(new URL("/", nextUrl))
   }
 
   return null
