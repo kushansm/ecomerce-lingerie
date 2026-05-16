@@ -1,8 +1,11 @@
 "use client"
 
-import { Heart, ShoppingBag } from "lucide-react"
+import { Heart, ShoppingBag, Eye } from "lucide-react"
 import Link from "next/link"
 import { useCart } from "@/lib/store/use-cart"
+import { useWishlist } from "@/lib/store/use-wishlist"
+import { motion } from "framer-motion"
+import { cn } from "@/lib/utils"
 
 interface ProductCardProps {
   id: string
@@ -14,50 +17,70 @@ interface ProductCardProps {
 
 export default function ProductCard({ id, name, price, category, image }: ProductCardProps) {
   const { addItem } = useCart()
+  const { toggleItem, isInWishlist } = useWishlist()
+  const isWishlisted = isInWishlist(id)
 
   return (
-    <div className="group relative bg-ivory rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-rose/5">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="group relative bg-white rounded-[40px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-1000 border border-rose/5"
+    >
       {/* Image Container */}
-      <Link href={`/product/${id}`} className="relative aspect-[3/4] overflow-hidden block">
-        <img 
-          src={image} 
-          alt={name}
-          className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000 ease-out"
-        />
-        <div className="absolute top-5 right-5">
+      <div className="relative aspect-[4/5] overflow-hidden block">
+        <Link href={`/product/${id}`}>
+          <motion.img 
+            src={image} 
+            alt={name}
+            whileHover={{ scale: 1.1 }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="object-cover w-full h-full"
+          />
+        </Link>
+        
+        {/* Wishlist Button */}
+        <div className="absolute top-6 right-6 z-20">
           <button 
-            onClick={(e) => {
-              e.preventDefault()
-              // Toggle wishlist logic could go here
-            }}
-            className="bg-ivory/80 backdrop-blur-sm p-3 rounded-full text-charcoal/40 hover:text-wine transition-colors shadow-sm"
+            onClick={() => toggleItem({ id, name, price, category, image })}
+            className={cn(
+              "bg-white/90 backdrop-blur-md p-4 rounded-full transition-all duration-500 shadow-xl hover:scale-110",
+              isWishlisted ? "text-wine fill-wine" : "text-charcoal/40 hover:text-wine"
+            )}
           >
-            <Heart size={18} strokeWidth={1.5} />
+            <Heart size={20} strokeWidth={isWishlisted ? 2 : 1.5} />
           </button>
         </div>
-        
-        {/* Overlay with Quick Add */}
-        <div className="absolute inset-0 bg-wine/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      </Link>
 
-      <div className="absolute bottom-24 left-6 right-6 p-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-10">
+        {/* Quick View Overlay */}
+        <div className="absolute inset-0 bg-wine/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-center justify-center pointer-events-none">
+          <div className="bg-white/90 backdrop-blur-md p-4 rounded-full translate-y-10 group-hover:translate-y-0 transition-transform duration-700">
+            <Eye className="text-wine" size={24} />
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Add Button */}
+      <div className="absolute bottom-32 left-8 right-8 z-20 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700">
         <button 
           onClick={() => addItem({ id, name, price, category, image })}
-          className="w-full bg-wine text-white py-4 rounded-2xl flex items-center justify-center space-x-3 hover:bg-charcoal transition-colors shadow-2xl active:scale-95"
+          className="w-full bg-wine text-white py-5 rounded-2xl flex items-center justify-center space-x-3 hover:bg-charcoal transition-all shadow-2xl"
         >
           <ShoppingBag size={18} strokeWidth={1.5} />
-          <span className="font-medium uppercase tracking-widest text-xs">Add to Cart</span>
+          <span className="font-bold uppercase tracking-[0.2em] text-[10px]">Add to Atelier Bag</span>
         </button>
       </div>
 
       {/* Content */}
-      <div className="p-6 text-center">
-        <p className="text-[10px] text-rose uppercase tracking-[0.2em] mb-2 font-semibold">{category}</p>
+      <div className="p-10 text-center">
+        <p className="text-[10px] text-rose uppercase tracking-[0.3em] mb-3 font-bold">{category}</p>
         <Link href={`/product/${id}`}>
-          <h3 className="text-lg font-serif italic text-charcoal group-hover:text-wine transition-colors mb-2">{name}</h3>
+          <h3 className="text-xl font-serif italic text-charcoal group-hover:text-wine transition-colors mb-2 line-clamp-1">
+            {name}
+          </h3>
         </Link>
-        <p className="text-xl font-light text-wine">${price.toFixed(2)}</p>
+        <p className="text-2xl font-light text-wine">${price.toFixed(2)}</p>
       </div>
-    </div>
+    </motion.div>
   )
 }

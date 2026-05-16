@@ -1,36 +1,79 @@
 @import "tailwindcss";
 
+@theme {
+  --color-wine: #4A0F1F;
+  --color-rose: #C08A97;
+  --color-blush: #E7C7CF;
+  --color-ivory: #FAF6F2;
+  --color-charcoal: #2A2A2A;
+  --font-serif: var(--font-serif);
+}
+
 :root {
   --background: #FAF6F2;
   --foreground: #2A2A2A;
-  --wine: #4A0F1F;
-  --rose: #C08A97;
-  --blush: #E7C7CF;
-  --ivory: #FAF6F2;
-  --charcoal: #2A2A2A;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-wine: var(--wine);
-  --color-rose: var(--rose);
-  --color-blush: var(--blush);
-  --color-ivory: var(--ivory);
-  --color-charcoal: var(--charcoal);
-  
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-serif);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  transition: background-color 0.3s ease;
+  overflow-x: hidden;
 }
 
-.font-serif {
-  font-family: var(--font-serif), serif;
+/* Luxury Transitions */
+* {
+  transition: background-color 0.4s ease, border-color 0.4s ease, opacity 0.4s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF6F2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4A0F1F20;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4A0F1F40;
+}
+
+/* Elegant Text Selection */
+::selection {
+  background-color: #4A0F1F20;
+  color: #4A0F1F;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(250, 246, 242, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(192, 138, 151, 0.1);
+}
+
+/* Smooth Page Entries */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-entry {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Shimmer Effect for Loading */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #FAF6F2 25%, #E7C7CF 50%, #FAF6F2 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
 }
