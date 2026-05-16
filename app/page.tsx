@@ -1,41 +1,14 @@
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import ProductCard from "@/components/ProductCard"
-import { ArrowRight, Sparkles, Heart, Crown } from "lucide-react"
+import { ArrowRight, Heart, Crown, Sparkles } from "lucide-react"
 import Link from "next/link"
+import { getProducts } from "@/lib/products"
 
-const FEATURED_PRODUCTS = [
-  {
-    id: "1",
-    name: "Midnight Lace Set",
-    price: 125.00,
-    category: "Signature Collection",
-    image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80&w=600"
-  },
-  {
-    id: "2",
-    name: "Crimson Satin Slip",
-    price: 95.00,
-    category: "Romantic Wear",
-    image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&q=80&w=600"
-  },
-  {
-    id: "3",
-    name: "Velvet Embrace Bodysuit",
-    price: 145.00,
-    category: "Luxury Essentials",
-    image: "https://images.unsplash.com/photo-1621330396173-e41b1cafd17f?auto=format&fit=crop&q=80&w=600"
-  },
-  {
-    id: "4",
-    name: "Rose Dust Morning Robe",
-    price: 180.00,
-    category: "Lounge & Sleep",
-    image: "https://images.unsplash.com/photo-1549062300-1d3ad90bb4d5?auto=format&fit=crop&q=80&w=600"
-  }
-]
+export default async function Home() {
+  const products = await getProducts()
+  const featuredProducts = products.slice(0, 4)
 
-export default function Home() {
   return (
     <main className="min-h-screen bg-ivory text-charcoal">
       <Navbar />
@@ -74,7 +47,7 @@ export default function Home() {
               </span>
               <div className="absolute inset-0 bg-charcoal translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
             </Link>
-            <Link href="/categories" className="text-charcoal hover:text-wine font-serif italic text-lg flex items-center transition-all group">
+            <Link href="/shop" className="text-charcoal hover:text-wine font-serif italic text-lg flex items-center transition-all group">
               Our Story
               <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-2 transition-transform" />
             </Link>
@@ -135,9 +108,23 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-            {FEATURED_PRODUCTS.map((product) => (
-              <ProductCard key={product.id} {...product} />
+            {featuredProducts.map((product) => (
+              <ProductCard 
+                key={product.id} 
+                id={product.id}
+                name={product.name}
+                price={product.price}
+                category={product.category.name}
+                image={product.images[0]}
+              />
             ))}
+          </div>
+          
+          <div className="text-center mt-20">
+            <Link href="/shop" className="inline-flex items-center gap-4 text-wine font-serif italic text-xl group">
+              View the entire collection
+              <span className="w-12 h-[1px] bg-wine/30 group-hover:w-24 transition-all duration-500" />
+            </Link>
           </div>
         </div>
       </section>
@@ -146,7 +133,6 @@ export default function Home() {
       <section className="pb-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative bg-wine rounded-[48px] overflow-hidden px-8 py-20 lg:p-24 text-center">
-            {/* Background Texture */}
             <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/silk.png')]" />
             
             <div className="relative z-10 max-w-3xl mx-auto">
