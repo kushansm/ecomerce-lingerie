@@ -2,7 +2,8 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { getProduct } from "@/lib/products"
 import { notFound } from "next/navigation"
-import { Heart, ShoppingBag, ShieldCheck, Truck, Sparkles } from "lucide-react"
+import { Heart, ShieldCheck, Truck, Sparkles } from "lucide-react"
+import AddToCartButton from "@/components/AddToCartButton"
 
 interface ProductPageProps {
   params: Promise<{
@@ -64,10 +65,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {/* Actions */}
               <div className="space-y-6 mb-12">
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button className="flex-grow bg-wine text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-charcoal transition-all shadow-2xl flex items-center justify-center gap-3 active:scale-95">
-                    <ShoppingBag size={18} strokeWidth={1.5} />
-                    Add to Atelier Bag
-                  </button>
+                  <AddToCartButton 
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.images[0],
+                      category: product.category.name
+                    }} 
+                  />
                   <button className="bg-white text-wine border border-rose/20 px-6 py-5 rounded-2xl hover:border-wine transition-all shadow-sm group">
                     <Heart size={20} strokeWidth={1.5} className="group-hover:fill-wine transition-colors" />
                   </button>

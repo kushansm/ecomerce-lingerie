@@ -1,5 +1,8 @@
+"use client"
+
 import { Heart, ShoppingBag } from "lucide-react"
 import Link from "next/link"
+import { useCart } from "@/lib/store/use-cart"
 
 interface ProductCardProps {
   id: string
@@ -10,6 +13,8 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ id, name, price, category, image }: ProductCardProps) {
+  const { addItem } = useCart()
+
   return (
     <div className="group relative bg-ivory rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-rose/5">
       {/* Image Container */}
@@ -20,7 +25,13 @@ export default function ProductCard({ id, name, price, category, image }: Produc
           className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000 ease-out"
         />
         <div className="absolute top-5 right-5">
-          <button className="bg-ivory/80 backdrop-blur-sm p-3 rounded-full text-charcoal/40 hover:text-wine transition-colors shadow-sm">
+          <button 
+            onClick={(e) => {
+              e.preventDefault()
+              // Toggle wishlist logic could go here
+            }}
+            className="bg-ivory/80 backdrop-blur-sm p-3 rounded-full text-charcoal/40 hover:text-wine transition-colors shadow-sm"
+          >
             <Heart size={18} strokeWidth={1.5} />
           </button>
         </div>
@@ -30,7 +41,10 @@ export default function ProductCard({ id, name, price, category, image }: Produc
       </Link>
 
       <div className="absolute bottom-24 left-6 right-6 p-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-10">
-        <button className="w-full bg-wine text-white py-4 rounded-2xl flex items-center justify-center space-x-3 hover:bg-charcoal transition-colors shadow-2xl">
+        <button 
+          onClick={() => addItem({ id, name, price, category, image })}
+          className="w-full bg-wine text-white py-4 rounded-2xl flex items-center justify-center space-x-3 hover:bg-charcoal transition-colors shadow-2xl active:scale-95"
+        >
           <ShoppingBag size={18} strokeWidth={1.5} />
           <span className="font-medium uppercase tracking-widest text-xs">Add to Cart</span>
         </button>

@@ -5,10 +5,14 @@ import { ShoppingCart, User, Search, Menu, LogOut } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { useSession, signOut } from "next-auth/react"
+import { useCart } from "@/lib/store/use-cart"
+import { useMounted } from "@/lib/hooks/use-mounted"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const { data: session } = useSession()
+  const cart = useCart()
+  const mounted = useMounted()
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-ivory/80 backdrop-blur-md border-b border-rose/10">
@@ -54,10 +58,14 @@ export default function Navbar() {
               </Link>
             )}
 
-            <button className="text-charcoal/70 hover:text-wine transition-colors relative">
+            <Link href="/cart" className="text-charcoal/70 hover:text-wine transition-colors relative">
               <ShoppingCart size={20} strokeWidth={1.5} />
-              <span className="absolute -top-2 -right-2 bg-wine text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">0</span>
-            </button>
+              {mounted && cart.getItemCount() > 0 && (
+                <span className="absolute -top-2 -right-2 bg-wine text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold animate-pulse">
+                  {cart.getItemCount()}
+                </span>
+              )}
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -79,6 +87,9 @@ export default function Navbar() {
           <Link href="/categories" className="block text-sm uppercase tracking-widest text-charcoal/70 hover:text-wine">Categories</Link>
           <Link href="/new-arrivals" className="block text-sm uppercase tracking-widest text-charcoal/70 hover:text-wine">New Arrivals</Link>
           <Link href="/sale" className="block text-sm uppercase tracking-widest text-wine font-bold">Sale</Link>
+          <Link href="/cart" className="block text-sm uppercase tracking-widest text-charcoal/70">
+            Bag ({mounted ? cart.getItemCount() : 0})
+          </Link>
           <div className="pt-4 border-t border-rose/10">
             {session ? (
               <div className="flex flex-col space-y-4">
