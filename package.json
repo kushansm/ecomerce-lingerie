@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "preinstall": "npm config set legacy-peer-deps true",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
