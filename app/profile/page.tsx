@@ -70,7 +70,7 @@ export default async function ProfilePage() {
 
               {orders.length > 0 ? (
                 <div className="space-y-6">
-                  {orders.map((order) => (
+                  {orders.map((order: any) => (
                     <Link 
                       key={order.id} 
                       href={`/order/${order.id}`}
@@ -102,7 +102,7 @@ export default async function ProfilePage() {
 
                       {/* Item Preview */}
                       <div className="mt-8 flex gap-3 overflow-x-auto pb-2 scrollbar-none">
-                        {order.items.map((item) => (
+                        {order.items.map((item: any) => (
                           <div key={item.id} className="relative w-16 h-20 rounded-xl overflow-hidden border border-rose/5 flex-shrink-0">
                             <img src={item.product.images[0]} className="w-full h-full object-cover" />
                           </div>

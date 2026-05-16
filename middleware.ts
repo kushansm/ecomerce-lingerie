@@ -13,13 +13,13 @@ export default auth((req) => {
   const isProtectedRoute = ["/cart", "/checkout", "/profile"].includes(nextUrl.pathname)
   const isAdminRoute = nextUrl.pathname.startsWith("/admin")
 
-  if (isApiAuthRoute) return null
+  if (isApiAuthRoute) return
 
   if (isAuthRoute) {
     if (isLoggedIn) {
       return Response.redirect(new URL("/", nextUrl))
     }
-    return null
+    return
   }
 
   if (!isLoggedIn && (isProtectedRoute || isAdminRoute)) {
@@ -30,7 +30,7 @@ export default auth((req) => {
     return Response.redirect(new URL("/", nextUrl))
   }
 
-  return null
+  return
 })
 
 export const config = {

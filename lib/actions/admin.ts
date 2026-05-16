@@ -3,16 +3,17 @@
 import { auth } from "@/auth"
 import prisma from "@/lib/db"
 import { revalidatePath } from "next/cache"
+import { OrderStatus, Prisma } from "@prisma/client"
 
 const checkAdmin = async () => {
   const session = await auth()
-  if ((session?.user as any)?.role !== "ADMIN") {
+  if (session?.user?.role !== "ADMIN") {
     throw new Error("Unauthorized")
   }
 }
 
 // Product Actions
-export const createProduct = async (values: any) => {
+export const createProduct = async (values: Prisma.ProductCreateInput) => {
   await checkAdmin()
   const product = await prisma.product.create({
     data: values
@@ -22,7 +23,7 @@ export const createProduct = async (values: any) => {
   return product
 }
 
-export const updateProduct = async (id: string, values: any) => {
+export const updateProduct = async (id: string, values: Prisma.ProductUpdateInput) => {
   await checkAdmin()
   const product = await prisma.product.update({
     where: { id },
@@ -44,7 +45,7 @@ export const deleteProduct = async (id: string) => {
 }
 
 // Order Actions
-export const updateOrderStatus = async (id: string, status: any) => {
+export const updateOrderStatus = async (id: string, status: OrderStatus) => {
   await checkAdmin()
   const order = await prisma.order.update({
     where: { id },

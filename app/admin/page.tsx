@@ -23,7 +23,7 @@ export default async function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {cardStats.map((stat) => {
+        {cardStats.map((stat: any) => {
           const Icon = stat.icon
           return (
             <div key={stat.label} className="bg-white rounded-[32px] p-8 shadow-sm border border-rose/5 flex items-center gap-6">
@@ -60,7 +60,7 @@ export default async function AdminDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-rose/5">
-              {stats.recentOrders.map((order) => (
+              {stats.recentOrders.map((order: any) => (
                 <tr key={order.id} className="group hover:bg-ivory/50 transition-colors">
                   <td className="py-6">
                     <p className="text-sm font-serif italic text-charcoal">{order.user.name}</p>

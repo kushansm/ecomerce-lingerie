@@ -4,7 +4,21 @@ import { auth } from "@/auth"
 import prisma from "@/lib/db"
 import { revalidatePath } from "next/cache"
 
-export const createOrder = async (values: any, items: any[]) => {
+interface CheckoutValues {
+  address: string
+  city: string
+  phone: string
+  paymentMethod: string
+  total: number
+}
+
+interface CheckoutItem {
+  id: string
+  quantity: number
+  price: number
+}
+
+export const createOrder = async (values: CheckoutValues, items: CheckoutItem[]) => {
   const session = await auth()
   
   if (!session?.user?.id) {
@@ -32,7 +46,7 @@ export const createOrder = async (values: any, items: any[]) => {
       },
     })
 
-    // Update stock (optional but recommended)
+    // Update stock
     for (const item of items) {
       await prisma.product.update({
         where: { id: item.id },

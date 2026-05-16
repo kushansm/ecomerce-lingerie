@@ -3,6 +3,7 @@ import Footer from "@/components/Footer"
 import prisma from "@/lib/db"
 import { notFound } from "next/navigation"
 import { CheckCircle2, Package, Truck, Home, Calendar, CreditCard } from "lucide-react"
+import Link from "next/link"
 
 interface OrderPageProps {
   params: Promise<{
@@ -85,7 +86,7 @@ export default async function OrderPage({ params }: OrderPageProps) {
             <div className="bg-white rounded-[40px] p-10 shadow-sm border border-rose/5">
               <h2 className="text-xl font-serif italic text-wine mb-8">Selected Pieces</h2>
               <div className="space-y-6">
-                {order.items.map((item) => (
+                {order.items.map((item: any) => (
                   <div key={item.id} className="flex gap-4 border-b border-rose/5 pb-6 last:border-0 last:pb-0">
                     <img src={item.product.images[0]} className="w-16 h-20 object-cover rounded-xl border border-rose/5" />
                     <div className="flex-grow">
@@ -150,5 +151,3 @@ export default async function OrderPage({ params }: OrderPageProps) {
     </main>
   )
 }
-
-import Link from "next/link"

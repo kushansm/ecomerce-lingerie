@@ -50,9 +50,10 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           {/* Products Grid */}
           {products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12">
-              {products.map((product) => (
+              {products.map((product: any) => (
                 <ProductCard 
                   key={product.id} 
+                  id={product.id}
                   name={product.name}
                   price={product.price}
                   category={product.category.name}

@@ -11,6 +11,7 @@ export const {
   signIn, 
   signOut 
 } = NextAuth({
+  ...authConfig,
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   pages: {
@@ -60,5 +61,4 @@ export const {
       },
     }),
   ],
-  ...authConfig,
 })

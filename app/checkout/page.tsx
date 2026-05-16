@@ -33,14 +33,18 @@ export default function CheckoutPage() {
 
     const formData = new FormData(e.currentTarget)
     const values = {
-      address: formData.get("address"),
-      city: formData.get("city"),
-      phone: formData.get("phone"),
-      paymentMethod: formData.get("paymentMethod"),
+      address: formData.get("address") as string,
+      city: formData.get("city") as string,
+      phone: formData.get("phone") as string,
+      paymentMethod: formData.get("paymentMethod") as string,
       total,
     }
 
-    const result = await createOrder(values, items)
+    const result = await createOrder(values, items.map(item => ({
+      id: item.id,
+      quantity: item.quantity,
+      price: item.price
+    })))
 
     if (result.error) {
       setError(result.error)

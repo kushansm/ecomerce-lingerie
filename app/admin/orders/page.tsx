@@ -2,6 +2,7 @@ import prisma from "@/lib/db"
 import { Eye, ChevronDown } from "lucide-react"
 import Link from "next/link"
 import { updateOrderStatus } from "@/lib/actions/admin"
+import { OrderStatus } from "@prisma/client"
 
 export default async function AdminOrders() {
   const orders = await prisma.order.findMany({
@@ -9,7 +10,7 @@ export default async function AdminOrders() {
     orderBy: { createdAt: "desc" }
   })
 
-  const statuses = ["PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"]
+  const statuses = Object.values(OrderStatus)
 
   return (
     <div className="space-y-12">
@@ -33,7 +34,7 @@ export default async function AdminOrders() {
               </tr>
             </thead>
             <tbody className="divide-y divide-rose/5">
-              {orders.map((order) => (
+              {orders.map((order: any) => (
                 <tr key={order.id} className="group hover:bg-ivory/50 transition-colors">
                   <td className="py-6">
                     <p className="text-xs font-bold text-wine tracking-widest">#{order.id.slice(-8).toUpperCase()}</p>
@@ -47,9 +48,9 @@ export default async function AdminOrders() {
                     ${order.total.toFixed(2)}
                   </td>
                   <td className="py-6">
-                    <form action={async (formData) => {
+                    <form action={async (formData: FormData) => {
                       "use server"
-                      const newStatus = formData.get("status")
+                      const newStatus = formData.get("status") as OrderStatus
                       await updateOrderStatus(order.id, newStatus)
                     }} className="relative group/select">
                       <select 
